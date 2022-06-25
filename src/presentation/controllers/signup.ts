@@ -1,10 +1,6 @@
-import { Controller } from '../../protocols/controller'
-import { EmailValidator } from '../../protocols/email-validator'
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { InvalidParamError } from '../errors/InvalidParamError'
-import { MissingParamError } from '../errors/MissingParamError'
-import { ServerError } from '../errors/ServerError'
-import { badRequest } from '../helpers/http-helper'
+import { Controller, EmailValidator, HttpRequest, HttpResponse } from '../../protocols'
+import { InvalidParamError, MissingParamError } from '../errors'
+import { badRequest, serverError } from '../helpers/http-helper'
 
 export class SignUpController implements Controller {
   constructor (private readonly emailValidator: EmailValidator) {}
@@ -20,10 +16,7 @@ export class SignUpController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
     } catch {
-      return {
-        statusCode: 500,
-        body: new ServerError()
-      }
+      return serverError()
     }
     return {
       statusCode: 200,
